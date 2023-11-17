@@ -53,11 +53,11 @@ func Make(str string, conn *websocket.Conn, commands map[string]Command) error {
 		}
 
 		commands[newCommandSplit[0]] = Command{
+			MqttCommand:        newCommandSplit[0],
 			MainCommand:        newCommandSplit[1],
 			RelayArguments:     newCommandSplit[2] == "1",
 			MqttBrokerId:       newCommandSplit[3],
 			ResponseCallbackId: newCommandSplit[4],
-			MqttCommand:        newCommandSplit[0],
 		}
 		a, _ := json.Marshal(commands[newCommandSplit[0]])
 
