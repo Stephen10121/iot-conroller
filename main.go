@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -23,6 +24,8 @@ var connections = make(map[string]*websocket.Conn)
 func removeConnector(conn *websocket.Conn) {
 	delete(connections, conn.RemoteAddr().String())
 	conn.Close()
+
+	fmt.Println("Closed Connection: " + conn.RemoteAddr().String())
 }
 
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +38,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	connectionId := conn.RemoteAddr().String()
+	fmt.Println("New Connection: " + connectionId)
 	connections[connectionId] = conn
 
 	for {
