@@ -59,7 +59,7 @@ function connect() {
 connect();
 
 function makeTestCommand() {
-    ws.send("make test:setlight500:1:brokerid:lightIsSet");
+    ws.send("make test:setlight500:1:brokerid:topic/testPong");
 }
 
 function runTestCommand() {

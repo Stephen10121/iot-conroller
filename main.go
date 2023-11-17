@@ -56,7 +56,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		switch str[0] {
 		case "make":
-			err := function.Make(strings.Join(str[1:], " "), conn, commands)
+			err := function.Make(strings.Join(str[1:], " "), conn, commands, messageQeaueConnection)
 
 			if err != nil {
 				log.Println(err)

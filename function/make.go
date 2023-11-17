@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gorilla/websocket"
+	messageqeue "github.com/stephen10121/iot-conroller/messageQeue"
 )
 
 type Command struct {
@@ -16,7 +18,7 @@ type Command struct {
 	MqttCommand        string `json:"mqttCommand"`
 }
 
-func Make(str string, conn *websocket.Conn, commands map[string]Command) error {
+func Make(str string, conn *websocket.Conn, commands map[string]Command, client mqtt.Client) error {
 	if len(str) > 1 {
 		fmt.Println("Making command: " + str)
 
@@ -62,6 +64,7 @@ func Make(str string, conn *websocket.Conn, commands map[string]Command) error {
 		a, _ := json.Marshal(commands[newCommandSplit[0]])
 
 		err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+str+`","data":`+string(a)+`}`))
+		messageqeue.Subscribe(client, newCommandSplit[4])
 
 		if err != nil {
 			return err

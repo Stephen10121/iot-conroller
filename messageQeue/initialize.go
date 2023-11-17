@@ -22,6 +22,13 @@ func Publish(client mqtt.Client, message string) {
 	client.Publish("topic/test", 0, false, message)
 }
 
+func Subscribe(client mqtt.Client, topic string) {
+	token := client.Subscribe(topic, 1, nil)
+	token.Wait()
+	fmt.Printf("Subscribed to topic %s", topic)
+	fmt.Println()
+}
+
 func Initialize() mqtt.Client {
 	var broker = "192.168.0.27"
 	var port = 1883
@@ -37,9 +44,11 @@ func Initialize() mqtt.Client {
 	opts.OnConnectionLost = connectLostHandler
 
 	client := mqtt.NewClient(opts)
+
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 
+	//Subscribe(client, "topic/test")
 	return client
 }
