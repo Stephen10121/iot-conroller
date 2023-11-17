@@ -17,15 +17,25 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var commands = make(map[string]string)
+var commands = make(map[string]function.Command)
+var connections = make(map[string]*websocket.Conn)
+
+func removeConnector(conn *websocket.Conn) {
+	delete(connections, conn.RemoteAddr().String())
+	conn.Close()
+}
 
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
+	defer removeConnector(conn)
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
+	connectionId := conn.RemoteAddr().String()
+	connections[connectionId] = conn
 
 	for {
 		_, message, err := conn.ReadMessage()
@@ -39,7 +49,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		switch str[0] {
 		case "make":
-			err := function.Make(str, conn, commands)
+			err := function.Make(strings.Join(str[1:], " "), conn, commands)
 
 			if err != nil {
 				log.Println(err)
