@@ -7,6 +7,26 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+    <div class="status">
+        <p>Socket Status:</p>
+        <div id="socketIndicator"><p>Connected</p></div>
+    </div>
     <p>Iot Controller</p>
 </body>
+<style>
+    p {
+        font-family: sans-serif;
+        font-weight: bold;
+    }
+    .status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #socketIndicator {
+        padding: 0 10px;
+        border-radius: 10px;
+        display: block;
+    }
+</style>
 </html>
