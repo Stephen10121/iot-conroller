@@ -3,14 +3,29 @@ const SOCKET_ADDRESS = (WIN_URL.protocol.includes("https") ? "wss://" : "ws://")
 const indicator = document.querySelector("#socketIndicator")
 let ws;
 
+function setStatus(status) {
+    switch (status) {
+        case "connected":
+            indicator.style.backgroundColor = "#07ff07";
+            indicator.children[0].innerText = "Connected";
+            break
+        case "connecting":
+            indicator.style.backgroundColor = "#ed8e1d";
+            indicator.children[0].innerText = "Reconnecting";
+            break
+        default:
+            indicator.style.backgroundColor = "#d13a3a";
+            indicator.children[0].innerText = "Disconnected";
+    }
+}
+
 function connect() {
     ws = new WebSocket(SOCKET_ADDRESS);
 
     function socketOpen() {
         // console.log(event);
         console.log("Socket connected.")
-        indicator.style.backgroundColor = "#07ff07";
-        indicator.children[0].innerText = "Connected";
+        setStatus("connected");
         ws.send("test");
     }
 
@@ -23,11 +38,9 @@ function connect() {
 
     ws.onclose = function(e) {
         if (indicator.children[0].innerText === "Connected") {
-            indicator.style.backgroundColor = "#d13a3a";
-            indicator.children[0].innerText = "Disconnected";
+            setStatus("disconnected");
         } else {
-            indicator.style.backgroundColor = "#ed8e1d";
-            indicator.children[0].innerText = "Reconnecting";
+            setStatus("reconnecting");
         }
         console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
         setTimeout(function() {
@@ -44,3 +57,11 @@ function connect() {
 }
   
 connect();
+
+function makeTestCommand() {
+    ws.send("make test:setlight500:1:brokerid:lightIsSet");
+}
+
+function runTestCommand() {
+    ws.send("test ttesting something");
+}

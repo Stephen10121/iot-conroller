@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"strings"
 
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gorilla/websocket"
 	"github.com/stephen10121/iot-conroller/function"
+	messageqeue "github.com/stephen10121/iot-conroller/messageQeue"
 )
 
 var upgrader = websocket.Upgrader{
@@ -20,6 +22,7 @@ var upgrader = websocket.Upgrader{
 
 var commands = make(map[string]function.Command)
 var connections = make(map[string]*websocket.Conn)
+var messageQeaueConnection mqtt.Client
 
 func removeConnector(conn *websocket.Conn) {
 	delete(connections, conn.RemoteAddr().String())
@@ -70,7 +73,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				break
 			} else {
-				err := function.RunCommand(str, commands[str[0]], conn)
+				err := function.RunCommand(str, commands[str[0]], conn, messageQeaueConnection)
 
 				if err != nil {
 					log.Println(err)
@@ -83,6 +86,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	fs := http.FileServer(http.Dir("./static"))
+	messageQeaueConnection = messageqeue.Initialize()
 
 	http.HandleFunc("/socket", websocketHandler)
 	http.Handle("/", fs)
