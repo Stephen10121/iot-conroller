@@ -66,7 +66,12 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				break
 			} else {
-				function.RunCommand(string(message), commands[str[0]])
+				err := function.RunCommand(str, commands[str[0]], conn)
+
+				if err != nil {
+					log.Println(err)
+				}
+				break
 			}
 		}
 	}
