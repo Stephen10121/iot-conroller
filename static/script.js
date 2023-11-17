@@ -3,6 +3,11 @@ const SOCKET_ADDRESS = (WIN_URL.protocol.includes("https") ? "wss://" : "ws://")
 
 const websocket = new WebSocket(SOCKET_ADDRESS);
 
-setTimeout(() => {
+websocket.onopen = (event) => {
+    // console.log(event);
     websocket.send("test");
-}, 1000);
+}
+
+websocket.onmessage = (event) => {
+    console.log(JSON.parse(event.data));
+}
