@@ -1,7 +1,7 @@
 package function
 
 import (
-	"fmt"
+	"log"
 	"strings"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -11,7 +11,8 @@ import (
 
 func RunCommand(command []string, params Command, conn *websocket.Conn, mqttClient mqtt.Client) error {
 	joinedCommand := strings.Join(command, " ")
-	actualCommand := params.MainCommand + " " + strings.Join(command[1:], " ")
+	actualCommand := strings.Join([]string{params.MainCommand, strings.Join(command[1:], " ")}, " ")
+
 	if params.RelayArguments {
 		if len(command) < 2 {
 			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no arguments given","command":"`+joinedCommand+`"}`))
@@ -21,18 +22,11 @@ func RunCommand(command []string, params Command, conn *websocket.Conn, mqttClie
 			}
 			return nil
 		}
-
-		err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+joinedCommand+`","data":"sent command"}`))
-		fmt.Println("Running command: " + command[0] + ". With args: " + command[1] + ". Command sent to broker: " + actualCommand)
-		go messageqeue.Publish(mqttClient, actualCommand)
-
-		if err != nil {
-			return err
-		}
-		return nil
 	}
+
+	log.Println("Running command: " + command[0] + ". Command sent to broker: " + actualCommand)
+
 	err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+joinedCommand+`","data":"sent command"}`))
-	fmt.Println("Running command: " + command[0] + ". Command sent to broker: " + actualCommand)
 	go messageqeue.Publish(mqttClient, actualCommand)
 
 	if err != nil {
