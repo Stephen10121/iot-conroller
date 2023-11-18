@@ -63,10 +63,18 @@ function makeTestCommand() {
     ws.send("make test:setlight500:1:topic/testPong");
 }
 
+function makeAnotherTestCommand() {
+    ws.send("make test2:setlight500:1:topic/testPong");
+}
+
 function runTestCommand() {
     ws.send("test ttesting something");
 }
 
 function deleteTestCommand() {
     ws.send("delete test");
+}
+
+function getTestCommand() {
+    ws.send("get");
 }

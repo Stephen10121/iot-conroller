@@ -32,7 +32,7 @@ func Make(str string, conn *websocket.Conn, commands map[string]Command, client 
 			return nil
 		}
 
-		if newCommandSplit[0] == "make" || newCommandSplit[0] == "delete" {
+		if newCommandSplit[0] == "make" || newCommandSplit[0] == "delete" || newCommandSplit[0] == "get" {
 			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"command is reserved","command":"`+str+`"}`))
 
 			if err != nil {
