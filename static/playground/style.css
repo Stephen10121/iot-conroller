@@ -1,0 +1,82 @@
+*,*::before,*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    /* background-color: #0f111a; */
+    background-color: #7D84B2;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    padding: 10px;
+}
+
+.commands {
+    height: 80px;
+    background-color: #D9DBF1;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.status {
+    background-color: #8E9DCC;
+    height: 100%;
+    aspect-ratio: 2/1;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px inset, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px inset;
+}
+
+#socketIndicator {
+    background-color: #db4b4b;
+}
+
+#socketIndicatorText {
+    font-family: sans-serif;
+    font-weight: bold;
+    color: black;
+}
+
+.commands button {
+    background-color: #8E9DCC;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    border: none;
+    cursor: pointer;
+    padding: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    transition: box-shadow 0.15s linear;
+}
+
+.commands button:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 4px 5px 5px -1px, rgba(0, 0, 0, 0.3) 0px 3px 3px -1px;
+}
+.commands button:active {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px inset, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px inset;
+}
+
+#fetch img,
+#add img {
+    height: 100%;
+}
