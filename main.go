@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slices"
 	"strings"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gorilla/websocket"
+	"github.com/stephen10121/iot-conroller/config"
 	"github.com/stephen10121/iot-conroller/function"
 	messageqeue "github.com/stephen10121/iot-conroller/messageQeue"
 )
@@ -16,7 +18,16 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		fmt.Println(r.Host)
+		if len(config.AllowOrigins) > 0 {
+			if slices.Contains(config.AllowOrigins, r.Host) {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return true
+		}
 	},
 }
 
@@ -33,12 +44,13 @@ func removeConnector(conn *websocket.Conn) {
 
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
-	defer removeConnector(conn)
 
 	if err != nil {
-		log.Println(err)
+		log.Println("bob", err)
 		return
 	}
+
+	defer removeConnector(conn)
 
 	connectionId := conn.RemoteAddr().String()
 	fmt.Println("New Connection: " + connectionId)
