@@ -63,23 +63,21 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			break
 		default:
-			commandExists := function.CustomCommandChecker(str[0], commands)
-
-			if !commandExists {
-				err = conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no such command","command":"`+str[0]+`"}`))
-
-				if err != nil {
-					log.Println(err)
-				}
-				break
-			} else {
+			if function.CustomCommandChecker(str[0], commands) {
 				err := function.RunCommand(str, commands[str[0]], conn, messageQeaueConnection)
 
 				if err != nil {
 					log.Println(err)
 				}
-				break
+			} else {
+				err = conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no such command","command":"`+str[0]+`"}`))
+
+				if err != nil {
+					log.Println(err)
+				}
+
 			}
+			break
 		}
 	}
 }
