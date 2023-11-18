@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/stephen10121/iot-conroller/function"
 	messageqeue "github.com/stephen10121/iot-conroller/messageQeue"
+	"github.com/stephen10121/iot-conroller/types"
 )
 
 var upgrader = websocket.Upgrader{
@@ -21,6 +22,7 @@ var upgrader = websocket.Upgrader{
 }
 
 var commands = make(map[string]function.Command)
+var responder = make(map[string]types.ResponderMap)
 var connections = make(map[string]*websocket.Conn)
 var messageQeaueConnection mqtt.Client
 
@@ -56,7 +58,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		switch str[0] {
 		case "make":
-			err := function.Make(strings.Join(str[1:], " "), conn, commands, messageQeaueConnection)
+			err := function.Make(strings.Join(str[1:], " "), conn, commands, messageQeaueConnection, responder)
 
 			if err != nil {
 				log.Println(err)
