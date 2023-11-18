@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"slices"
@@ -18,7 +17,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		fmt.Println(r.Host)
+		log.Println(r.Host)
 		if len(config.AllowOrigins) > 0 {
 			if slices.Contains(config.AllowOrigins, r.Host) {
 				return true
@@ -39,7 +38,7 @@ func removeConnector(conn *websocket.Conn) {
 	delete(connections, conn.RemoteAddr().String())
 	conn.Close()
 
-	fmt.Println("Closed Connection: " + conn.RemoteAddr().String())
+	log.Println("Closed Connection: " + conn.RemoteAddr().String())
 }
 
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +52,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	defer removeConnector(conn)
 
 	connectionId := conn.RemoteAddr().String()
-	fmt.Println("New Connection: " + connectionId)
+	log.Println("New Connection: " + connectionId)
 	connections[connectionId] = conn
 
 	for {

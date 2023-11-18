@@ -2,7 +2,7 @@ package function
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"strings"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -20,7 +20,7 @@ type Command struct {
 
 func Make(str string, conn *websocket.Conn, commands map[string]Command, client mqtt.Client, connections map[string]*websocket.Conn) error {
 	if len(str) > 1 {
-		fmt.Println("Making command: " + str)
+		log.Println("Making command: " + str)
 
 		newCommandSplit := strings.Split(str, ":")
 		if len(newCommandSplit) != 5 {

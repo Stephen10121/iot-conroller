@@ -1,7 +1,7 @@
 package function
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/gorilla/websocket"
 	messageqeue "github.com/stephen10121/iot-conroller/messageQeue"
@@ -17,7 +17,7 @@ func Delete(str string, conn *websocket.Conn, commands map[string]Command) error
 
 		return nil
 	}
-	fmt.Println("Deleting command: " + str)
+	log.Println("Deleting command: " + str)
 
 	messageqeue.Unsubscribe(commands[str].ResponseCallbackId)
 	delete(commands, str)

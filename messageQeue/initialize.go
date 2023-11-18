@@ -9,15 +9,15 @@ import (
 )
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-	fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
+	log.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
-	fmt.Println("Connected")
+	log.Println("Connected")
 }
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
-	fmt.Printf("Connect lost: %v", err)
+	log.Printf("Connect lost: %v", err)
 }
 
 func Publish(client mqtt.Client, message string) {
@@ -37,8 +37,8 @@ func Subscribe(client mqtt.Client, topic string, connections map[string]*websock
 		}
 	})
 	token.Wait()
-	fmt.Printf("Subscribed to topic %s", topic)
-	fmt.Println()
+	log.Printf("Subscribed to topic %s", topic)
+	log.Println()
 
 	subscribers[topic] = token
 }
