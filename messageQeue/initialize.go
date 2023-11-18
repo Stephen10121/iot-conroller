@@ -6,6 +6,7 @@ import (
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gorilla/websocket"
+	"github.com/stephen10121/iot-conroller/config"
 )
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
@@ -51,11 +52,9 @@ func Unsubscribe(topic string) {
 }
 
 func setClientOption() *mqtt.ClientOptions {
-	var broker = "192.168.0.27"
-	var port = 1883
 	opts := mqtt.NewClientOptions()
 
-	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", broker, port))
+	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", config.BrokerAddress, config.BrokerPort))
 	opts.SetClientID("go_mqtt_client")
 	opts.SetUsername("emqx")
 	opts.SetPassword("public")
