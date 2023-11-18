@@ -24,6 +24,8 @@ func Publish(client mqtt.Client, message string) {
 	client.Publish("topic/test", 0, false, message)
 }
 
+var subscribers = make(map[string]mqtt.Token)
+
 func Subscribe(client mqtt.Client, topic string, connections map[string]*websocket.Conn) {
 	token := client.Subscribe(topic, 1, func(c mqtt.Client, m mqtt.Message) {
 		for i := range connections {
@@ -37,6 +39,14 @@ func Subscribe(client mqtt.Client, topic string, connections map[string]*websock
 	token.Wait()
 	fmt.Printf("Subscribed to topic %s", topic)
 	fmt.Println()
+
+	subscribers[topic] = token
+}
+
+func Unsubscribe(topic string) {
+	subscribers[topic].Done()
+
+	delete(subscribers, topic)
 }
 
 func setClientOption() *mqtt.ClientOptions {

@@ -74,6 +74,13 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			break
+		case "delete":
+			err := function.Delete(str[1], conn, commands)
+
+			if err != nil {
+				log.Println(err)
+			}
+			break
 		default:
 			if function.CustomCommandChecker(str[0], commands) {
 				err := function.RunCommand(str, commands[str[0]], conn, messageQeaueConnection)

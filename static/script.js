@@ -66,3 +66,7 @@ function makeTestCommand() {
 function runTestCommand() {
     ws.send("test ttesting something");
 }
+
+function deleteTestCommand() {
+    ws.send("delete test");
+}
