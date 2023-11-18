@@ -37,16 +37,17 @@ func Subscribe(client mqtt.Client, topic string, connections map[string]*websock
 		}
 	})
 	token.Wait()
-	log.Printf("Subscribed to topic %s", topic)
-	log.Println()
-
 	subscribers[topic] = token
+
+	log.Println("Subscribed to topic:", topic)
 }
 
 func Unsubscribe(topic string) {
 	subscribers[topic].Done()
 
 	delete(subscribers, topic)
+
+	log.Println("Unubscribed to topic:", topic)
 }
 
 func setClientOption() *mqtt.ClientOptions {
@@ -75,6 +76,5 @@ func Initialize() mqtt.Client {
 		panic(token.Error())
 	}
 
-	//Subscribe(client, "topic/test")
 	return client
 }
