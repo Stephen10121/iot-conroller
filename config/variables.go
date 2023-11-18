@@ -8,3 +8,15 @@ var BrokerAddress = "192.168.0.27"
 
 // The port of the mqtt broker.
 var BrokerPort = 1883
+
+// How the mqtt broker will id the client
+var BrokerClientID = "go_mqtt_client"
+
+// Leave empty if the mqtt broker doesnt require credentials
+var BrokerUsername = ""
+
+// Leave empty if the mqtt broker doesnt require credentials
+var BrokerPassword = ""
+
+// This is the port of the websocket server and the main web page
+var ServerPort = ":5000"

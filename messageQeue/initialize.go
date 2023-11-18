@@ -55,9 +55,9 @@ func setClientOption() *mqtt.ClientOptions {
 	opts := mqtt.NewClientOptions()
 
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", config.BrokerAddress, config.BrokerPort))
-	opts.SetClientID("go_mqtt_client")
-	opts.SetUsername("emqx")
-	opts.SetPassword("public")
+	opts.SetClientID(config.BrokerClientID)
+	opts.SetUsername(config.BrokerUsername)
+	opts.SetPassword(config.BrokerPassword)
 	opts.SetAutoReconnect(true)
 	opts.SetDefaultPublishHandler(messagePubHandler)
 

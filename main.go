@@ -107,5 +107,6 @@ func main() {
 	http.HandleFunc("/socket", websocketHandler)
 	http.Handle("/", fs)
 
-	log.Fatal(http.ListenAndServe(":5000", nil))
+	log.Println("Running web/socket server on port: " + config.ServerPort)
+	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
