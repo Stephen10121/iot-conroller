@@ -6,7 +6,6 @@ import (
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gorilla/websocket"
-	"github.com/stephen10121/iot-conroller/types"
 )
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
@@ -25,17 +24,13 @@ func Publish(client mqtt.Client, message string) {
 	client.Publish("topic/test", 0, false, message)
 }
 
-func Subscribe(client mqtt.Client, topic string, responder map[string]types.ResponderMap) {
+func Subscribe(client mqtt.Client, topic string, connections map[string]*websocket.Conn) {
 	token := client.Subscribe(topic, 1, func(c mqtt.Client, m mqtt.Message) {
-		val, ok := responder[m.Topic()]
-		// If the key exists
-		if ok {
-			for i := range val.Recievers {
-				err := val.Recievers[i].WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+m.Topic()+`","data":`+string(m.Payload())+`}`))
+		for i := range connections {
+			err := connections[i].WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+m.Topic()+`","data":"`+string(m.Payload())+`"}`))
 
-				if err != nil {
-					log.Println(err)
-				}
+			if err != nil {
+				log.Println(err)
 			}
 		}
 	})

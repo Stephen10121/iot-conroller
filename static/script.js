@@ -31,6 +31,7 @@ function connect() {
 
     function socketMessage(event) {
         console.log(JSON.parse(event.data));
+        // console.log(event.data);
     }
 
     ws.onopen = socketOpen;
