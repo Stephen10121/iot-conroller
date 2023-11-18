@@ -4,10 +4,10 @@ This is essentially a relay to a broker service that connect to multiple iot dev
 To make a custom command, use the make command in when connected to the websocket.
 ```javascript
 // Each configuration parameter is separated by a colon.
-ws.send("make testCommand:commandThatsSentToBroker:sendArgsToBrokerBool:brokerId:callback");
+ws.send("make testCommand:commandThatsSentToBroker:sendArgsToBrokerBool:callback");
 
 // For example
-ws.send("make test:setlight:1:broker5000:lightIsSet")
+ws.send("make test:setlight:1:lightIsSet")
 ```
 
 To use the custom command, send this to the websocket:

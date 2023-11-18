@@ -11,7 +11,6 @@ import (
 )
 
 type Command struct {
-	MqttBrokerId       string `json:"mqttBrokerId"`
 	ResponseCallbackId string `json:"responseCallbackId"`
 	RelayArguments     bool   `json:"relayArguments"`
 	MainCommand        string `json:"mainCommand"`
@@ -23,7 +22,7 @@ func Make(str string, conn *websocket.Conn, commands map[string]Command, client 
 		log.Println("Making command: " + str)
 
 		newCommandSplit := strings.Split(str, ":")
-		if len(newCommandSplit) != 5 {
+		if len(newCommandSplit) != 4 {
 			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"argument given is not formatted properly","command":"`+str+`"}`))
 
 			if err != nil {
@@ -58,13 +57,12 @@ func Make(str string, conn *websocket.Conn, commands map[string]Command, client 
 			MqttCommand:        newCommandSplit[0],
 			MainCommand:        newCommandSplit[1],
 			RelayArguments:     newCommandSplit[2] == "1",
-			MqttBrokerId:       newCommandSplit[3],
-			ResponseCallbackId: newCommandSplit[4],
+			ResponseCallbackId: newCommandSplit[3],
 		}
 		a, _ := json.Marshal(commands[newCommandSplit[0]])
 
 		err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+str+`","data":`+string(a)+`}`))
-		messageqeue.Subscribe(client, newCommandSplit[4], connections)
+		messageqeue.Subscribe(client, newCommandSplit[3], connections)
 
 		if err != nil {
 			return err
