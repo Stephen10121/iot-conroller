@@ -15,7 +15,7 @@ func RunCommand(command []string, params Command, conn *websocket.Conn, mqttClie
 
 	if params.RelayArguments {
 		if len(command) < 2 {
-			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no arguments given","command":"`+joinedCommand+`"}`))
+			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no arguments given","command":"`+joinedCommand+`", "type":"`+params.ResponseCallbackId+`"}`))
 
 			if err != nil {
 				return err
@@ -26,7 +26,7 @@ func RunCommand(command []string, params Command, conn *websocket.Conn, mqttClie
 
 	log.Println("Running command: " + command[0] + ". Command sent to broker: " + actualCommand)
 
-	err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+joinedCommand+`","data":"sent command"}`))
+	err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+joinedCommand+`","data":"sent command", "type":"`+params.ResponseCallbackId+`"}`))
 	go messageqeue.Publish(mqttClient, actualCommand)
 
 	if err != nil {

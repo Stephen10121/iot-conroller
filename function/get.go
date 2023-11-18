@@ -14,7 +14,7 @@ func Get(conn *websocket.Conn, commands map[string]Command) error {
 		return err
 	}
 
-	err = conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command": "get","data":`+string(jsonData)+`}`))
+	err = conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command": "get","data":`+string(jsonData)+`, "type":"getCommandCallback"}`))
 
 	if err != nil {
 		return err
