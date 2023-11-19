@@ -67,7 +67,7 @@ function makeTestCommand() {
 }
 
 function makeAnotherTestCommand() {
-    ws.send("make test2:setlight500:1:topic/testPong");
+    ws.send("make test2:topic/test2:topic/testPong2");
 }
 
 function runTestCommand() {
