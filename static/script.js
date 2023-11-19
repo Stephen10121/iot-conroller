@@ -63,7 +63,7 @@ function connect() {
 connect();
 
 function makeTestCommand() {
-    ws.send("make test:setlight500:1:topic/testPong");
+    ws.send("make test:topic/test:topic/testPong");
 }
 
 function makeAnotherTestCommand() {
@@ -80,4 +80,28 @@ function deleteTestCommand() {
 
 function getTestCommand() {
     ws.send("get");
+}
+
+let addCommand = false;
+function toggleAddCommand() {
+    addCommand = !addCommand;
+    if (addCommand) {
+        document.querySelector("#addCommand").style.display = "flex";
+    } else {
+        document.querySelector("#addCommand").style.display = "none";
+    }
+}
+
+function addCommandForm() {
+    let box = document.querySelector("#addCommand").children
+    const data = {commandName: box[1].value, actuallCommand: box[2].value, relayParams: box[3].children[1].checked, callback: box[4].value}
+
+    const text = `make ${data.commandName}:${data.actuallCommand}:${data.relayParams ? "1" : "0"}:${data.callback}`;
+    ws.send(text);
+    addCommand = !addCommand;
+    if (addCommand) {
+        document.querySelector("#addCommand").style.display = "flex";
+    } else {
+        document.querySelector("#addCommand").style.display = "none";
+    }
 }

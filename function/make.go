@@ -12,17 +12,15 @@ import (
 
 type Command struct {
 	ResponseCallbackId string `json:"responseCallbackId"`
-	RelayArguments     bool   `json:"relayArguments"`
-	MainCommand        string `json:"mainCommand"`
-	MqttCommand        string `json:"mqttCommand"`
+	PublishTopic       string `json:"publishTopic"`
 }
 
 func Make(str string, conn *websocket.Conn, commands map[string]Command, client mqtt.Client, connections map[string]*websocket.Conn) error {
-	if len(str) > 1 {
+	if len(str) > 0 {
 		log.Println("Making command: " + str)
 
 		newCommandSplit := strings.Split(str, ":")
-		if len(newCommandSplit) != 4 {
+		if len(newCommandSplit) != 3 {
 			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"argument given is not formatted properly","command":"`+str+`","type":"makeCommandCallback"}`))
 
 			if err != nil {
@@ -54,15 +52,13 @@ func Make(str string, conn *websocket.Conn, commands map[string]Command, client 
 		}
 
 		commands[newCommandSplit[0]] = Command{
-			MqttCommand:        newCommandSplit[0],
-			MainCommand:        newCommandSplit[1],
-			RelayArguments:     newCommandSplit[2] == "1",
-			ResponseCallbackId: newCommandSplit[3],
+			PublishTopic:       newCommandSplit[1],
+			ResponseCallbackId: newCommandSplit[2],
 		}
 		a, _ := json.Marshal(commands[newCommandSplit[0]])
 
 		err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+str+`","data":`+string(a)+`,"type":"makeCommandCallback"}`))
-		messageqeue.Subscribe(client, newCommandSplit[3], connections)
+		messageqeue.Subscribe(client, newCommandSplit[2], connections)
 
 		if err != nil {
 			return err

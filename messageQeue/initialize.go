@@ -21,8 +21,8 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 	log.Printf("Connect lost: %v", err)
 }
 
-func Publish(client mqtt.Client, message string) {
-	client.Publish("topic/test", 0, false, message)
+func Publish(client mqtt.Client, topic string, message string) {
+	client.Publish(topic, 0, false, message)
 }
 
 var subscribers = make(map[string]mqtt.Token)
@@ -30,7 +30,7 @@ var subscribers = make(map[string]mqtt.Token)
 func Subscribe(client mqtt.Client, topic string, connections map[string]*websocket.Conn) {
 	token := client.Subscribe(topic, 1, func(c mqtt.Client, m mqtt.Message) {
 		for i := range connections {
-			err := connections[i].WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+m.Topic()+`","data":"`+string(m.Payload())+`"}`))
+			err := connections[i].WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+m.Topic()+`","data":"`+string(m.Payload())+`", "type":"`+m.Topic()+`"}`))
 
 			if err != nil {
 				log.Println(err)

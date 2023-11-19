@@ -11,23 +11,12 @@ import (
 
 func RunCommand(command []string, params Command, conn *websocket.Conn, mqttClient mqtt.Client) error {
 	joinedCommand := strings.Join(command, " ")
-	actualCommand := strings.Join([]string{params.MainCommand, strings.Join(command[1:], " ")}, " ")
+	actualCommand := strings.Join(command[1:], " ")
 
-	if params.RelayArguments {
-		if len(command) < 2 {
-			err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no arguments given","command":"`+joinedCommand+`", "type":"`+params.ResponseCallbackId+`"}`))
-
-			if err != nil {
-				return err
-			}
-			return nil
-		}
-	}
-
-	log.Println("Running command: " + command[0] + ". Command sent to broker: " + actualCommand)
+	log.Println("Running command: " + command[0] + ". Command sent to broker: " + actualCommand + ". Topic: " + params.PublishTopic)
 
 	err := conn.WriteMessage(websocket.TextMessage, []byte(`{"error":false,"command":"`+joinedCommand+`","data":"sent command", "type":"`+params.ResponseCallbackId+`"}`))
-	go messageqeue.Publish(mqttClient, actualCommand)
+	go messageqeue.Publish(mqttClient, params.PublishTopic, actualCommand)
 
 	if err != nil {
 		return err

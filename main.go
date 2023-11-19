@@ -95,7 +95,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println(err)
 				}
 			} else {
-				err = conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no such command","command":"`+str[0]+`"}`))
+				err = conn.WriteMessage(websocket.TextMessage, []byte(`{"error":"no such command","command":"`+str[0]+`", "type":"noCommand"}`))
 
 				if err != nil {
 					log.Println(err)

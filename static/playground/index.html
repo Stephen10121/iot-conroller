@@ -9,7 +9,7 @@
 </head>
 <body>
     <section class="commands">
-        <button id="add" title="Add Controller">
+        <button id="add" title="Add Controller" onclick="toggleAddCommand()">
             <img src="/img/add.svg" alt="Add Controller">
         </button>
         <div class="status" id="socketIndicator">
@@ -18,6 +18,17 @@
         <button id="fetch" title="Fetch/Refetch Controller/s">
             <img src="/img/fetch.svg" alt="Fetch/Refetch Controller/s">
         </button>
+    </section>
+    <section id="addCommand">
+        <h2>Make a new Command</h2>
+        <input type="text" placeholder="Command Name" />
+        <input type="text" placeholder="Actuall command sent name" />
+        <label>
+            <p>Relay parameters</p>
+            <input type="checkbox">
+        </label>
+        <input type="text" placeholder="Iot callback topic" />
+        <button onclick="addCommandForm()">Add Command</button>
     </section>
 </body>
 </html>
